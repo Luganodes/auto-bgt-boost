@@ -1,0 +1,39 @@
+services:
+  bgt_boost:
+    build: .
+    container_name: bgt_boost
+    env_file:
+      - .env
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  mongo:
+    image: mongo:latest
+    container_name: bgt_boost_mongo
+    restart: unless-stopped
+    command: --port ${DB_PORT}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - mongo_volume:/data/db
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "--port",
+          "${DB_PORT}",
+          "--eval",
+          "db.adminCommand('ping')",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+volumes:
+  mongo_volume:

@@ -1,0 +1,15 @@
+build_image_staging:
+  only:
+    - staging
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - docker build -t registry.gitlab.com/luganodes/open-source-internal/$CI_PROJECT_NAME:staging .
+    - docker push registry.gitlab.com/luganodes/open-source-internal/$CI_PROJECT_NAME:staging
+
+build_image_prod:
+  only:
+    - main
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - docker build -t registry.gitlab.com/luganodes/open-source-internal/$CI_PROJECT_NAME:prod .
+    - docker push registry.gitlab.com/luganodes/open-source-internal/$CI_PROJECT_NAME:prod
