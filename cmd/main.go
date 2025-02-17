@@ -42,7 +42,7 @@ func main() {
 	ethRepository := repository.NewEthRepository(ethClient, config)
 
 	infisicalClient := infisical.NewInfisicalClient(context.Background(), infisical.Config{
-		SiteUrl:          config.InfisicalConfig.SiteURL,
+		SiteUrl:          config.InfisicalConfig.SiteUrl,
 		AutoTokenRefresh: true,
 	})
 	infisicalRepository := repository.NewInfisicalRepository(&infisicalClient, config)

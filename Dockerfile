@@ -8,6 +8,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd
 FROM alpine:latest
 
 RUN apk --no-cache add ca-certificates
+RUN apk add --no-cache bash curl && curl -1sLf \
+'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.alpine.sh' | bash \
+&& apk add infisical
 
 WORKDIR /app
 COPY --from=builder /app/main .

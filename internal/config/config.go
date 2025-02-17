@@ -28,7 +28,7 @@ type DbConfig struct {
 }
 
 type InfisicalConfig struct {
-	SiteURL      string
+	SiteUrl      string
 	ClientID     string
 	ClientSecret string
 	ProjectID    string
@@ -72,7 +72,7 @@ func LoadConfig() *Config {
 			Port:     getEnvInt("DB_PORT", ptr(27017)),
 		},
 		InfisicalConfig: InfisicalConfig{
-			SiteURL:      getEnvString("INFISICAL_SITE_URL", nil),
+			SiteUrl:      getEnvString("INFISICAL_API_URL", nil),
 			ClientID:     getEnvString("INFISICAL_CLIENT_ID", nil),
 			ClientSecret: getEnvString("INFISICAL_CLIENT_SECRET", nil),
 			ProjectID:    getEnvString("INFISICAL_PROJECT_ID", nil),
