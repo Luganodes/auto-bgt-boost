@@ -178,7 +178,7 @@ func (r *mongoRepository) DoesQueueBoostExist(ctx context.Context, pubkey string
 }
 
 func (r *mongoRepository) MarkBoostAsActivated(ctx context.Context, transactionHash string) error {
-	return r.Collection("queue_boosts").UpdateOne(ctx, bson.M{"transactionHash": transactionHash}, bson.M{"$set": bson.M{"activated": true}})
+	return r.Collection("queue_boosts").UpdateOne(ctx, bson.M{"transactionHash": transactionHash}, bson.M{"activated": true})
 }
 
 func (r *mongoRepository) GetValidators(ctx context.Context) ([]models.Validator, error) {
