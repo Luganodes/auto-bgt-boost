@@ -27,25 +27,16 @@ type DbConfig struct {
 	DbName   string
 }
 
-type InfisicalConfig struct {
-	SiteUrl      string
-	ClientID     string
-	ClientSecret string
-	ProjectID    string
-	Environment  string
-	KeyId        string
-}
-
 type Config struct {
-	Environment     string
-	API_PORT        int
-	Db              DbConfig
-	AdminAPIKey     string
-	InfisicalConfig InfisicalConfig
+	Environment string
+	API_PORT    int
+	Db          DbConfig
+	AdminAPIKey string
 
-	RPC_URL     string
-	BGTContract Contract
-	GasLimit    int
+	RPC_URL       string
+	Web3SignerURL string
+	BGTContract   Contract
+	GasLimit      int
 
 	CronSchedule string
 }
@@ -71,22 +62,15 @@ func LoadConfig() *Config {
 			DbName:   getEnvString("DB_NAME", ptr("bgt_boost")),
 			Port:     getEnvInt("DB_PORT", ptr(27017)),
 		},
-		InfisicalConfig: InfisicalConfig{
-			SiteUrl:      getEnvString("INFISICAL_API_URL", nil),
-			ClientID:     getEnvString("INFISICAL_CLIENT_ID", nil),
-			ClientSecret: getEnvString("INFISICAL_CLIENT_SECRET", nil),
-			ProjectID:    getEnvString("INFISICAL_PROJECT_ID", nil),
-			Environment:  getEnvString("INFISICAL_ENVIRONMENT", ptr("prod")),
-			KeyId:        getEnvString("INFISICAL_KMS_KEY_ID", nil),
-		},
 		AdminAPIKey: getEnvString("ADMIN_API_KEY", nil),
 
-		RPC_URL: getEnvString("RPC_URL", nil),
+		RPC_URL:       getEnvString("RPC_URL", nil),
+		Web3SignerURL: getEnvString("WEB3SIGNER_URL", nil),
 		BGTContract: Contract{
 			Address: common.HexToAddress(bgtContract),
 			ABI:     bgtABI,
 		},
-		GasLimit: getEnvInt("GAS_LIMIT", ptr(69818)),
+		GasLimit: getEnvInt("GAS_LIMIT", ptr(150000)),
 
 		CronSchedule: getEnvString("CRON_SCHEDULE", ptr("0 */5 * * * *")),
 	}

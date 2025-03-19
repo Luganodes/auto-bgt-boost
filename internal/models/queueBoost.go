@@ -3,7 +3,6 @@ package models
 import "time"
 
 type QueueBoost struct {
-	Activated       bool      `bson:"activated"`
 	ValidatorPubkey string    `bson:"validatorPubkey"`
 	OperatorAddress string    `bson:"operatorAddress"`
 	BlockNumber     uint64    `bson:"blockNumber"`

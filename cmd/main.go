@@ -14,7 +14,6 @@ import (
 	"syscall"
 
 	"github.com/ethereum/go-ethereum/ethclient"
-	infisical "github.com/infisical/go-sdk"
 	"github.com/robfig/cron/v3"
 )
 
@@ -41,22 +40,20 @@ func main() {
 	defer ethClient.Close()
 	ethRepository := repository.NewEthRepository(ethClient, config)
 
-	infisicalClient := infisical.NewInfisicalClient(context.Background(), infisical.Config{
-		SiteUrl:          config.InfisicalConfig.SiteUrl,
-		AutoTokenRefresh: true,
-	})
-	infisicalRepository := repository.NewInfisicalRepository(&infisicalClient, config)
+	requestRepository := repository.NewRequestRepository([]int{})
+	signerService := services.NewSignerService(config.Web3SignerURL, &requestRepository)
+	boostService := services.NewBoostService(config, &db, &ethRepository, &signerService)
 
 	c := cron.New(cron.WithSeconds())
 	_, err = c.AddFunc(config.CronSchedule, func() {
-		err = services.BoostValidator(context.Background(), config, &db, &ethRepository, &infisicalRepository)
+		err = boostService.BoostValidator(context.Background())
 		if err != nil {
 			panic(fmt.Sprintf("cannot boost validator: %s", err))
 		}
 		utils.PrintNextExecution(c)
 	})
 
-	err = services.BoostValidator(context.Background(), config, &db, &ethRepository, &infisicalRepository)
+	err = boostService.BoostValidator(context.Background())
 	if err != nil {
 		panic(fmt.Sprintf("cannot boost validator: %s", err))
 	}
