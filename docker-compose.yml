@@ -6,7 +6,6 @@ services:
       - .env
     ports:
       - "${API_PORT}:${API_PORT}"
-    command: infisical run --env prod --watch --projectId ${INFISICAL_PROJECT_ID} -- ./main
     depends_on:
       mongo:
         condition: service_healthy

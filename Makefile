@@ -1,5 +1,3 @@
-# Simple Makefile for a Go project
-
 # Build the application
 all: build
 
@@ -13,14 +11,23 @@ build:
 run:
 	@go run cmd/main.go
 
+# Create DB container
+docker-run:
+	@if docker compose up 2>/dev/null; then \
+		: ; \
+	else \
+		echo "Falling back to Docker Compose V1"; \
+		docker-compose up; \
+	fi
 
-
-# Test the application
-test:
-	@echo "Testing..."
-	@go test ./... -v
-
-
+# Shutdown DB container
+docker-down:
+	@if docker compose down 2>/dev/null; then \
+		: ; \
+	else \
+		echo "Falling back to Docker Compose V1"; \
+		docker-compose down; \
+	fi
 
 # Clean the binary
 clean:
@@ -28,7 +35,6 @@ clean:
 	@rm -f main
 
 # Live Reload
-
 watch:
 	@if command -v air > /dev/null; then \
             air; \
